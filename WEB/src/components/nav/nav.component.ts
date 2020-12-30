@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { LoginDto } from 'src/models/LoginDto.model';
-import { UserDto } from 'src/models/UserDto.model';
 import { AccountService } from 'src/_services/account.service';
 
 @Component({
@@ -10,22 +10,26 @@ import { AccountService } from 'src/_services/account.service';
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent implements OnInit {
-  model: LoginDto = { username: 'dekams', password: 'Dek@Heaven1!'};
+  model: LoginDto = { username: '', password: 'Dek@Heaven1!'};
 
-  constructor(public accountService: AccountService) { }
+  constructor(public accountService: AccountService, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void {}
 
   login(): void {
     this.accountService.login(this.model)
       .subscribe((userDto) => {
-        console.log(userDto);
-        this.model.username = userDto.username;
-      }, (error) => console.log(error));
+        this.router.navigateByUrl('/members');
+        this.toastr.success('Logged In', 'Login');
+      }, (error) => {
+        console.log(error);
+        this.toastr.error(error.error);
+      });
   }
 
   logout(): void {
     this.accountService.logout();
+    this.router.navigateByUrl('/');
   }
 
 }
