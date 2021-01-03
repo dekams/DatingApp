@@ -23,7 +23,6 @@ export class NavComponent implements OnInit {
         this.toastr.success('Logged In', 'Login');
       }, (error) => {
         console.log(error);
-        this.toastr.error(error.error);
       });
   }
 
