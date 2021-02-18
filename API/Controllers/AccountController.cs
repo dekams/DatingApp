@@ -17,9 +17,11 @@ namespace API.Controllers
     public class AccountController : BaseApiController
     {
         private readonly ITokenService tokenService;
+        private DataContext Context { get; set; }
 
-        public AccountController(DataContext context, ITokenService tokenService) : base(context)
+        public AccountController(DataContext context, ITokenService tokenService)
         {
+            this.Context = context;
             this.tokenService = tokenService;
         }
 
@@ -55,7 +57,7 @@ namespace API.Controllers
             byte[] computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
 
             for(int i = 0; i < computedHash.Length; i++)
-                if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid username/Password");
+                if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid username/Password.");
 
             return  user.ToUserDto(tokenService);
         }

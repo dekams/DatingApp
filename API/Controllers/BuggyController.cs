@@ -12,7 +12,8 @@ namespace API.Controllers
 {
     public class BuggyController : BaseApiController
     {
-        public BuggyController(DataContext context): base(context) {}
+        private DataContext Context { get; set; }
+        public BuggyController(DataContext context) { }
 
         [Authorize]
         [HttpGet("auth")]
